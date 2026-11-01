@@ -1,0 +1,9 @@
+class GameError(Exception):
+    ...
+
+class EmptyStockError(GameError):
+    ...
+
+class InvalidActionError(GameError):
+    ...
+    
