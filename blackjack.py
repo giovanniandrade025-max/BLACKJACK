@@ -46,7 +46,7 @@ class Blackjack:
     def phase(self):
         return self._phase
 
-    def dispach(self, action: Action):
+    def dispatch(self, action: Action):
         match self._phase, action:
             case Phase.DEALING, Action.DEALER_DEAL:
                 dealt = len(self._dealer.hand) + len(self._player.hand)
