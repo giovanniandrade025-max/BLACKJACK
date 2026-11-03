@@ -33,6 +33,7 @@ def print_game(game: Blackjack, msg: str = '') -> None:
     if msg:
         print(f"  {msg}")
     print("=" *42)
+    print()
 
 def play_round() -> None:
     game = Blackjack()
