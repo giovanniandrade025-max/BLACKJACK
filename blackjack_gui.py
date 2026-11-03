@@ -23,7 +23,7 @@ class HandView(tk.Frame):
 
         for card in participant.hand:
             tk.Label(self._cards, text=str(card),
-                     font=("TkDefaultFont", 24)).pack(side="left", padx=2)
+                     font=("TkDefaultFont", 36)).pack(side="left", padx=2)
 
 
 class BlackjackApp(tk.Tk):
