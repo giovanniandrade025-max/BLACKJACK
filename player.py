@@ -1,4 +1,3 @@
-
 from card import Card, Rank
 from card_collections import Hand, Stock
 
@@ -15,7 +14,7 @@ class Participant:
 
     @property
     def hand(self):
-        return self._hand
+        return tuple(self._hand)
 
     @property
     def points(self):

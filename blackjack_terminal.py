@@ -1,3 +1,7 @@
+import sys
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8')
+
 from blackjack import Blackjack, Phase, Action, Outcome
 
 DEALER_ACTIONS = {
@@ -33,18 +37,32 @@ def print_game(game: Blackjack, msg: str = '') -> None:
 def play_round() -> None:
     game = Blackjack()
 
+    while game.phase == Phase.DEALING:
+        action, msg = DEALER_ACTIONS[game.phase]
+        print_game(game, msg)
+        input("  Pressione [Enter] para continuar...")
+        game.dispatch(action)
+
+    
     while game.phase != Phase.FINISHED:
-        if game.phase in DEALER_ACTIONS:
+        if game.phase == Phase.PLAYER_TURN:
+            print_game(game, STATUS_MESSAGES[game.phase])
+            choice = input("  Pressione [Enter] para pedir uma carta ou [P] para parar: ").strip().lower()
+            
+            if choice == "p":
+                game.dispatch(Action.PLAYER_STAND)
+            else:
+                game.dispatch(Action.PLAYER_HIT)
+
+        elif game.phase in DEALER_ACTIONS:
+            
             action, msg = DEALER_ACTIONS[game.phase]
             print_game(game, msg)
             input("  Pressione [Enter] para continuar...")
             game.dispatch(action)
-        else:
-            print_game(game, STATUS_MESSAGES[game.phase])
-            choice = input("  Pressione [Enter] para pedir uma carta ou [P] para parar: ").strip().lower()
-            game.dispatch(Action.PLAYER_HIT if choice == "" else Action.PLAYER_STAND)
 
-    print_game(game, OUTCOME_MESSAGES[game.outcome])
+  
+    print_game(game, OUTCOME_MESSAGES[game.outcome()])
 
 def main() -> None:
     print("Bem-vindo à mesa do Blackjack. Divirta-se!")
@@ -55,3 +73,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+   

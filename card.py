@@ -73,5 +73,8 @@ class Card:
     def __str__(self) -> str:
         if not self._is_face_up:
             return self.BACK_UNICODE
-        return chr(self._suit.unicode_base + self._rank.number)
+        offset = self._rank.number
+        if offset > 11:
+            offset += 1
+        return chr(self._suit.unicode_base + offset)
         

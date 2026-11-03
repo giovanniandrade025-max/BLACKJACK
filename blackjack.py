@@ -52,32 +52,33 @@ class Blackjack:
                 dealt = len(self._dealer.hand) + len(self._player.hand)
                 match dealt:
                     case 0:
-                        self._dealer.deal_to(self._dealer)
+                        self._dealer.deal_to(self._dealer, face_up=True)
                     case 1:
-                        self._dealer.deal_to(self._dealer, face_up = False)
+                        self._dealer.deal_to(self._dealer, face_up=False)
                     case _:
-                        self._dealer.deal_to(self._player)
+                        self._dealer.deal_to(self._player, face_up=True)
                 if dealt == 3:
                     self._phase = Phase.PLAYER_TURN
 
             case Phase.PLAYER_TURN, Action.PLAYER_HIT:
                 self._player.hit(self._dealer)
                 if self._player.is_busted:
-                    self.phase = Phase.FINISHED
+                    self._phase = Phase.FINISHED  # <-- CORRIGIDOaqui (self._phase em vez de self.phase)
 
             case Phase.PLAYER_TURN, Action.PLAYER_STAND:
                 self._phase = Phase.CARD_REVEAL
 
             case Phase.CARD_REVEAL, Action.DEALER_REVEAL:
                 self._dealer.reveal_card()
-                if self._dealer.hidden_points >= self._DEALER_STANDS_ON:
+                if self._dealer.hidden_points >= self._DEALER_STANDS_ON or self._dealer.is_busted:
                     self._phase = Phase.FINISHED
                 else:
                     self._phase = Phase.DEALER_TURN
 
             case Phase.DEALER_TURN, Action.DEALER_PLAY:
-                self._dealer.draw()
-                if self._dealer.hidden_points >= self._DEALER_STANDS_ON:
+                self._dealer.deal_to(self._dealer, face_up=True)
+                
+                if self._dealer.hidden_points >= self._DEALER_STANDS_ON or self._dealer.is_busted:
                     self._phase = Phase.FINISHED
 
             case _:
